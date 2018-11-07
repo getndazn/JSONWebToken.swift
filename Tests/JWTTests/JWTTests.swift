@@ -33,7 +33,22 @@ class EncodeTests: XCTestCase {
     let algorithm = Algorithm.hs256("secret".data(using: .utf8)!)
     let jwt = JWT.encode(claims: ClaimSet(), algorithm: algorithm, headers: ["kid": "x"])
 
-    XCTAssertEqual(jwt, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IngifQ.e30.ddEotxYYMMdat5HPgYFQnkHRdPXsxPG71ooyhIUoqGA")
+    let expected = [
+      // { "alg": "HS256", "typ": "JWT", "kid": "x" }
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IngifQ.e30.ddEotxYYMMdat5HPgYFQnkHRdPXsxPG71ooyhIUoqGA",
+      // { "alg": "HS256", "kid": "x", "typ": "JWT" }
+      "eyJhbGciOiJIUzI1NiIsImtpZCI6IngiLCJ0eXAiOiJKV1QifQ.e30.xiT6fWe5dWGeuq8zFb0je_14Maa_9mHbVPSyJhUIJ54",
+      // { "typ": "JWT", "alg": "HS256", "kid": "x" }
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IngifQ.e30.5t6a61tpSXFo5QBHYCnKAz2mTHrW9kaQ9n_b7e-jWw0",
+      // { "typ": "JWT", "kid": "x", "alg": "HS256" }
+      "eyJ0eXAiOiJKV1QiLCJraWQiOiJ4IiwiYWxnIjoiSFMyNTYifQ.e30.DG5nmV2CVH6mV_iEm0xXZvL0DUJ22ek2xy6fNi_pGLc",
+      // { "kid": "x", "typ": "JWT", "alg": "HS256" }
+      "eyJraWQiOiJ4IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.e30.h5ZvlqECBIvu9uocR5_5uF3wnhga8vTruvXpzaHpRdA",
+      // { "kid": "x", "alg": "HS256", "typ": "JWT" }
+      "eyJraWQiOiJ4IiwiYWxnIjoiSFMyNTYiLCJ0eXAiOiJKV1QifQ.e30.5KqN7N5a7Cfbe2eKN41FJIfgMjcdSZ7Nt16xqlyOeMo"
+    ]
+
+    XCTAssertTrue(expected.contains(jwt))
   }
 }
 
